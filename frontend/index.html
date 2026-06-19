@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextPlay - Bienvenido</title>
+    <link rel="icon" type="image/x-icon" href="public/assets/favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /*Estilos pagina bienvenida*/
+        .bienvenida-wrapper {
+            min-height: calc(100vh - var(--nav-height));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+        .bienvenida-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 3rem 2.5rem;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            animation: fadeInUp 0.5s ease both;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bienvenida-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, var(--violeta), var(--celeste));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            color: #fff;
+            letter-spacing: -1px;
+            box-shadow: 0 8px 24px rgba(124,58,237,0.3);
+
+        }
+        .bienvenida-titulo {
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 900;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+        }
+        .bienvenida-titulo span {
+            background: linear-gradient(135deg, var(--violeta), var(--celeste));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .bienvenida-subtitulo {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.5;
+        }
+        .bienvenida-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .bienvenida-form .form-group {
+            text-align: left;
+
+        }
+        .bienvenida-form .form-input {
+            font-size: 1.05rem;
+            padding: 0.85rem 1.1rem;
+            text-align:  center;
+            letter-spacing: 0.3px;
+        }
+
+
+        .bienvenida-form .form-input:focus{
+            transform: none;
+        }
+        .btn-continuar {
+            width: 100%;
+            padding: 0.9rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            background: linear-gradient(135deg, var(--violeta), #6d28d9);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 16px rgba(124,58,237,0.35);
+        }
+        .btn-continuar:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--violeta-oscuro), var(--violeta));
+            box-shadow: 0 6px 24px rgba(124,58,237,0.45);
+            transform: translateY(-1px);
+        }
+
+        .btn-continuar:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-continuar svg {
+            width: 20px;
+            height: 20px;
+        }
+        .bienvenida-footer p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .bienvenida-admin-link {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: color 0.2s;
+        }
+
+        .bienvenida-admin-link:hover {
+            color: var(--accent);
+        }
+        .bienvenida-admin-link svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        @media (max-width: 480px) {
+            .bienvenida-card {
+                padding: 2rem 1.5rem;
+                border-radius: var(--radius-lg);
+            }
+            .bienvenida-icon {
+                width: 64px;
+                height: 64px;
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- barra de navegacion -->
+    <nav class="navbar">
+        <a href="index.html" class="navbar__brand">
+            <div class="navbar__logo-placeholder">NP</div>
+            <span class="navbar__appname">NextPlay</span>
+        </a>
+        <div class="navbar__right">
+            <span class="navbar__alumnos">Alumnos: Llop Tomas &amp; Lopez Juan</span>
+            <button class="btn-theme" id="btnTema" title="Cambiar Tema" aria-label="Cambiar Tema">
+                <svg id="iconoSol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg id="iconoLuna" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+    <!-- contrnido principal -->
+    <main class="main-content">
+        <div class="bienvenida-wrapper">
+            <div class="bienvenida-card">
+                <div class="bienvenida-icon">NP</div>
+                <h1>Bienvenido a <span>NextPlay</span></h1>
+                <p class="bienvenida-subtitulo">
+                    Tu tienda de videojuegos y consolas.<br>
+                    Ingresa tu nombre para comenzar.
+                </p>
+                <form class="bienvenida-form" id="formBienvenida" novalidate>
+                    <div class="form-group">
+                        <label for="inputNombre" class="form-label">¿Como te llamas?</label>
+                        <input 
+                            type="text"
+                            id="inputNombre"
+                            class="form-input"
+                            placeholder="Tu nombre"
+                            maxlength="40"
+                            autocomplete="off"
+                            autocapitalize="words"
+                        />
+                        <span class="form-error" id="errorNombre">
+                            Por favor ingresa tu nombre para continuar.
+                        </span>
+                    </div>
+                    <button type="submit" class="btn-continuar" id="btnContinuar" disabled>
+                        Explorar productos
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </button>
+                </form>
+                <!-- footer -->
+                <div class="bienvenida-footer">
+                    <p>¿Sos administrador?</p>
+                    <a href="" class="bienvenida-admin-link" id="linkAdmin">
+                        Acceder al panel
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <script src="js/utils.js"></script>
+    <script type="module" src="js/bienvenida.js"></script>
+</body>
+</html>
