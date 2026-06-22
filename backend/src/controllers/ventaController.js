@@ -15,11 +15,11 @@ export const createVenta = (req, res) => {
 
 export const getTicketVenta = (req, res) => {
     const { id } = req.params;
+    
     const enviarPDF = (bufferPDF) => {
         res.setHeader("Content-type", "application/pdf");
         res.setHeader("Content-Disposition",`inline; filename="ticket-${id}.pdf"`);
         res.send(bufferPDF);
-
     };
 
     leerVentaConDetalle(id)
