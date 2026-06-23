@@ -7,8 +7,13 @@ export function aplicarTema(tema) {
 }
 
 export function obtenerTema() {
-    return localStorage.getItem(TEMA_KEY) || 'light';
+    try {
+        return localStorage.getItem(TEMA_KEY) || 'light';
+    } catch {
+        return 'light';
+    }
 }
+
 
 export function toggleTema() {
     const actual = document.documentElement.getAttribute('data-theme') || 'light';

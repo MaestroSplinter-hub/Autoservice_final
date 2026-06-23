@@ -1,5 +1,6 @@
 import { iniciarTema, toggleTema, obtenerNombre ,actualizarBadgeCarrito , formatearPrecio} from './utils.js';
 import { apiVentas } from './api/cliente-api.js'; 
+
 iniciarTema();
 actualizarBadgeCarrito();
 document.getElementById('btnTema').addEventListener('click', toggleTema);

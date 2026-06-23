@@ -8,15 +8,8 @@ const inputNombre = document.getElementById('inputNombre');
 const btnContinuar =document.getElementById('btnContinuar');
 const errorNombre = document.getElementById('errorNombre');
 const btnTema = document.getElementById('btnTema');
-const linkAdmin = document.getElementById('linkAdmin');
 
 btnTema.addEventListener('click', toggleTema);
-
-// panel admin, aun no listo
-linkAdmin.addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('panel admin en trabajo');
-});
 
 //habilitar o deshabilitar boton
 inputNombre.addEventListener('input', () => {

@@ -1,0 +1,93 @@
+   @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@700;900&family=DM+Sans:wght@400;500;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+        font-family: 'DM Sans', Arial, sans-serif;
+        color: #1A1033;
+        padding: 32px;
+    }
+
+    .ticket {
+        max-width: 480px;
+        margin: 0 auto;
+        border: 1px solid rgba(124, 58, 237, 0.15);
+        border-radius: 18px;
+        overflow: hidden;
+    }
+
+    .ticket__header {
+        background: linear-gradient(135deg, #7C3AED, #38BDF8);
+        padding: 24px;
+        color: #fff;
+        text-align: center;
+    }
+
+    .ticket__logo {
+        font-family: 'Exo 2', Arial, sans-serif;
+        font-weight: 900;
+        font-size: 22px;
+        letter-spacing: -0.5px;
+    }
+
+    .ticket__subtitulo {
+        font-size: 12px;
+        opacity: 0.9;
+        margin-top: 4px;
+    }
+
+    .ticket__body { padding: 24px; }
+
+    .ticket__datos {
+        display: flex;
+        
+        justify-content: space-between;
+        font-size: 12px;
+        color: #4B4670;
+        margin-bottom:16px;
+        padding-bottom:16px;
+        border-bottom: 1px dashed rgba(124, 58, 237, 0.25);
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+
+    th {
+        text-align: left;
+        color: #8B85A8;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(124, 58, 237, 0.15);
+    }
+
+
+    th:last-child, td:last-child { text-align: right; }
+
+    td {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+    }
+
+    .ticket__total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top:16px;
+        padding-top:16px;
+        border-top: 1px dashed rgba(124, 58, 237, 0.25);
+        font-family: 'Exo 2', Arial, sans-serif;
+        font-weight: 900;
+        font-size: 18px;
+    }
+
+    .ticket__total span:last-child { color: #7C3AED; }
+
+    .ticket__footer {
+
+        text-align:center;
+        font-size: 11px;
+        color: #8B85A8;
+        padding: 16px 24px 24px;
+    }

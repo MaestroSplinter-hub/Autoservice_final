@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextPlay - Admin Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="../../public/assets/favicon.ico">
+    <link rel="stylesheet" href="../../public/css/login.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/login" class="navbar__brand">
+            <div class="navbar__logo-placeholder">NP</div>
+            <span class="navbar__appname">NextPlay</span>
+        </a>
+        <div class="navbar__right">
+            <span class="navbar__alumnos">Alumnos: Llop Tomas &amp; Lopez Juan</span>
+            <button class="btn-theme" id="btnTema" title="Cambiar Tema" aria-label="Cambiar Tema">
+                <svg id="iconoSol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+                <svg id="iconoLuna" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 style="text-align:center; margin-bottom: 1.5rem;">
+                Panel Admin - Productos
+            </h1>
+
+            <section style="margin-bottom: 3rem;">
+                <h2 style="margin-bottom: 1rem;">Agregar nuevo producto</h2>
+                <div class="card" style="max-width: 680px; margin: 0 auto;">
+                    <form action="/admin/productos" method="POST" enctype="multipart/form-data" class="bienvenida-form">
+                        <div class="form-group">
+                            <label class="form-label" for="nombre">Nombre</label>
+                            <input class="form-input" type="text" id="nombre" name="nombre" required />
+                        </div>
+
+                        <div class="form-group" style="display:flex; gap:1rem;">
+                            <div style="flex:1;">
+                                <label class="form-label" for="precio">Precio</label>
+                                <input class="form-input" type="number" step="0.01" id="precio" name="precio" required />
+                            </div>
+                            <div style="flex:1;">
+                                <label class="form-label" for="tipo">Tipo</label>
+                                <select class="form-input" id="tipo" name="tipo" required>
+                                    <option value="videojuego">Videojuego</option>
+                                    <option value="consola">Consola</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="imagen">Imagen</label>
+                            <input class="form-input" type="file" id="imagen" name="imagen" accept="image/*" />
+                        </div>
+
+                        <button class="btn btn-primary btn-lg" type="submit" style="width:100%; margin-top: 0.5rem;">
+                            Agregar producto
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <% const v = productosPorTipo.videojuego || []; %>
+            <% const c = productosPorTipo.consola || []; %>
+
+            <div style="display:grid; grid-template-columns: 1fr; gap: 2rem;">
+                <section>
+                    <h2 style="margin-bottom: 1rem;">Videojuegos</h2>
+                    <div style="display:flex; flex-direction:column; gap: 1rem;">
+                        <% v.forEach(function(p){ %>
+                            <div class="card" style="padding: 1.25rem;">
+                                <div style="display:flex; gap: 1rem; align-items:flex-start; flex-wrap:wrap;">
+                                    <div style="min-width: 180px; flex: 0;">
+                                        <% if (p.imagen) { %>
+                                            <img src="http://localhost:3000<%= p.imagen %>" alt="<%= p.nombre %>" style="width:180px; height:120px; object-fit:cover; border-radius:12px; border:1px solid var(--border-color);" />
+                                        <% } else { %>
+                                            <div style="width:180px; height:120px; border-radius:12px; border:1px dashed var(--border-color); display:flex; align-items:center; justify-content:center; color: var(--text-muted);">Sin imagen</div>
+                                        <% } %>
+                                    </div>
+
+                                    <div style="flex:1; min-width: 240px;">
+                                        <div><strong>Nombre:</strong> <%= p.nombre %></div>
+                                        <div><strong>Precio:</strong> <%= p.precio %></div>
+                                        <div><strong>Estado:</strong> <%= p.activo ? 'Activo' : 'Desactivado' %></div>
+
+                                        <div style="margin-top: 1rem; display:flex; gap: 0.75rem; flex-wrap:wrap;">
+                                            <% if (p.activo) { %>
+                                                <form action="/admin/productos/<%= p.id %>/desactivar" method="POST">
+                                                    <button class="btn btn-danger btn-sm" type="submit">Desactivar</button>
+                                                </form>
+                                            <% } else { %>
+                                                <form action="/admin/productos/<%= p.id %>/activar" method="POST">
+                                                    <button class="btn btn-primary btn-sm" type="submit">Activar</button>
+                                                </form>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 1rem;">
+                                    <form action="/admin/productos/<%= p.id %>" method="POST" enctype="multipart/form-data" style="display:grid; grid-template-columns: 1.2fr 0.8fr 1fr; gap: 0.75rem;">
+                                        <input class="form-input" type="text" name="nombre" value="<%= p.nombre %>" required />
+                                        <input class="form-input" type="number" step="0.01" name="precio" value="<%= p.precio %>" required />
+                                        <input class="form-input" type="file" name="imagen" accept="image/*" />
+
+                                        <input type="hidden" name="tipo" value="<%= p.tipo %>" />
+                                        <input type="hidden" name="activo" value="<%= p.activo %>" />
+
+                                        <div style="grid-column: 1 / -1; display:flex; justify-content:flex-end; gap:0.75rem;">
+                                            <button class="btn btn-secondary" type="submit">Guardar cambios</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        <% }); %>
+
+                        <% if (v.length === 0) { %>
+                            <div class="card" style="text-align:center; color: var(--text-muted);">No hay videojuegos cargados.</div>
+                        <% } %>
+                    </div>
+                </section>
+
+                <section>
+                    <h2 style="margin-bottom: 1rem;">Consolas</h2>
+                    <div style="display:flex; flex-direction:column; gap: 1rem;">
+                        <% c.forEach(function(p){ %>
+                            <div class="card" style="padding: 1.25rem;">
+                                <div style="display:flex; gap: 1rem; align-items:flex-start; flex-wrap:wrap;">
+                                    <div style="min-width: 180px; flex: 0;">
+                                        <% if (p.imagen) { %>
+                                            <img src="http://localhost:3000<%= p.imagen %>" alt="<%= p.nombre %>" style="width:180px; height:120px; object-fit:cover; border-radius:12px; border:1px solid var(--border-color);" />
+                                        <% } else { %>
+                                            <div style="width:180px; height:120px; border-radius:12px; border:1px dashed var(--border-color); display:flex; align-items:center; justify-content:center; color: var(--text-muted);">Sin imagen</div>
+                                        <% } %>
+                                    </div>
+
+                                    <div style="flex:1; min-width: 240px;">
+                                        <div><strong>Nombre:</strong> <%= p.nombre %></div>
+                                        <div><strong>Precio:</strong> <%= p.precio %></div>
+                                        <div><strong>Estado:</strong> <%= p.activo ? 'Activo' : 'Desactivado' %></div>
+
+                                        <div style="margin-top: 1rem; display:flex; gap: 0.75rem; flex-wrap:wrap;">
+                                            <% if (p.activo) { %>
+                                                <form action="/admin/productos/<%= p.id %>/desactivar" method="POST">
+                                                    <button class="btn btn-danger btn-sm" type="submit">Desactivar</button>
+                                                </form>
+                                            <% } else { %>
+                                                <form action="/admin/productos/<%= p.id %>/activar" method="POST">
+                                                    <button class="btn btn-primary btn-sm" type="submit">Activar</button>
+                                                </form>
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 1rem;">
+                                    <form action="/admin/productos/<%= p.id %>" method="POST" enctype="multipart/form-data" style="display:grid; grid-template-columns: 1.2fr 0.8fr 1fr; gap: 0.75rem;">
+                                        <input class="form-input" type="text" name="nombre" value="<%= p.nombre %>" required />
+                                        <input class="form-input" type="number" step="0.01" name="precio" value="<%= p.precio %>" required />
+                                        <input class="form-input" type="file" name="imagen" accept="image/*" />
+
+                                        <input type="hidden" name="tipo" value="<%= p.tipo %>" />
+                                        <input type="hidden" name="activo" value="<%= p.activo %>" />
+
+                                        <div style="grid-column: 1 / -1; display:flex; justify-content:flex-end; gap:0.75rem;">
+                                            <button class="btn btn-secondary" type="submit">Guardar cambios</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        <% }); %>
+
+                        <% if (c.length === 0) { %>
+                            <div class="card" style="text-align:center; color: var(--text-muted);">No hay consolas cargadas.</div>
+                        <% } %>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <script>
+            const btnTema = document.getElementById('btnTema');
+            const root = document.documentElement;
+            btnTema?.addEventListener('click', () => {
+                const current = root.getAttribute('data-theme') || 'light';
+                root.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+            });
+        </script>
+    </main>
+</body>
+</html>
+
