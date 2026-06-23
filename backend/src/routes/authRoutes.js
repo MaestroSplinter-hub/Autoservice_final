@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { mostrarLogin, loguear, loguearJSON } from "../controllers/authController.js";
-import { validarUsuarioAdmin } from "../middlewares/validaciones.js";
+import { validarUsuarioAdmin } from "../middlewares/productoMiddle.js";
 
 export const router = Router();
 

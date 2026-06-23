@@ -18,7 +18,6 @@ export const buscarVentaConDetalle = (id) => Venta.findByPk(id, {
         model: Producto,
         as: "productos",
         through: { attributes: ["cantidad", "precio_unitario"]}
-    
     }]
 });
 

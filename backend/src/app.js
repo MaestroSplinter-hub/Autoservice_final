@@ -2,10 +2,11 @@ import express from 'express';
 import path from "path";
 import cors from "cors";
 import sequelize from './config/database.js'; 
-import {router as usuarioRouter} from "./routes/usuarioRoutes.js";
-import {router as authRouter} from "./routes/authRoutes.js";
-import {router as productoRouter} from "./routes/productoRoutes.js";
-import {router as ventaRouter} from "./routes/ventaRoutes.js";
+import { router as usuarioRouter } from "./routes/usuarioRoutes.js";
+import { router as authRouter } from "./routes/authRoutes.js";
+import { router as productoRouter } from "./routes/productoRoutes.js";
+import { router as ventaRouter } from "./routes/ventaRoutes.js";
+import { router as adminRouter } from "./routes/adminRoutes.js";
 import { fileURLToPath } from 'url';
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/usuarios", usuarioRouter);
 app.use("/api/productos", productoRouter);
 app.use("/api/ventas", ventaRouter)
 app.use("/", authRouter);
+app.use("/", adminRouter);
 
 function iniciarServidor() {
 
