@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -159,7 +159,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <a href="/" class="navbar__brand">
+        <a href="http://127.0.0.1:5500/frontend/index.html" class="navbar__brand">
             <div class="navbar__logo-placeholder">NP</div>
             <span class="navbar__appname">NextPlay</span>
         </a>
@@ -223,20 +223,51 @@
         </div>
     </main>
     <script>
+        const TEMA_KEY = 'nextplay_tema';
+
+        function actualizarIconoTema(tema) {
+            const sol = document.getElementById('iconoSol');
+            const luna = document.getElementById('iconoLuna');
+            if (!sol || !luna) return;
+
+            if (tema === 'dark') {
+                sol.style.display = 'block';
+                luna.style.display = 'none';
+            } else {
+                sol.style.display = 'none';
+                luna.style.display = 'block';
+            }
+        }
+
+        function aplicarTema(tema) {
+            document.documentElement.setAttribute('data-theme', tema);
+            try { localStorage.setItem(TEMA_KEY, tema); } catch (_) {}
+            actualizarIconoTema(tema);
+        }
+
+        function obtenerTema() {
+            try {
+                return localStorage.getItem(TEMA_KEY) || 'light';
+            } catch {
+                return 'light';
+            }
+        }
+
+        aplicarTema(obtenerTema());
+
         const btnAccesoRapido = document.getElementById('btnAccesoRapido');
         const inputCorreo = document.getElementById('correo');
         const inputContrasenia = document.getElementById('contrasenia');
         const btnTema = document.getElementById('btnTema');
-        const root = document.documentElement;
 
-        btnAccesoRapido.addEventListener('click', () => {
+        btnAccesoRapido?.addEventListener('click', () => {
             inputCorreo.value = 'admin@nextplay.com';
             inputContrasenia.value = 'admin123';
         });
 
-        btnTema.addEventListener('click', () => {
-            const current = root.getAttribute('data-theme') || 'light';
-            root.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+        btnTema?.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            aplicarTema(current === 'light' ? 'dark' : 'light');
         });
     </script>
 </body>
