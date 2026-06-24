@@ -111,9 +111,12 @@ export function mostrarToast(mensaje, tipo = 'info', duracion = 3000) {
 
     contenedor.appendChild(toast);
     setTimeout(() => {
-        toast.style.animation = 'slideInToast 0.3s ease reverse';
-        toast.addEventListener('animationend', () => toast.remove(), { once: true });
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
     }, duracion);
+
 }
 
 // fromateo de precio
