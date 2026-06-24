@@ -1,4 +1,4 @@
-import { iniciarTema, toggleTema, obtenerNombre ,actualizarBadgeCarrito , formatearPrecio, limpiarCarrito} from './utils.js';
+import { iniciarTema, toggleTema, obtenerNombre ,actualizarBadgeCarrito , formatearPrecio, limpiarCarrito, limpiarSession} from './utils.js';
 import { apiVentas } from './api/cliente-api.js'; 
 
 iniciarTema();
@@ -102,7 +102,12 @@ function renderTicket(venta) {
                 </button>
             </div>
         </div>`;
-
+    document.getElementById('btnFinalizar').addEventListener('click', () => {
+        sessionStorage.removeItem('nextplay_venta_id');
+        limpiarCarrito();
+        limpiarSession();
+        window.location.href = 'index.html';
+    });
 }
 
 function renderError() {
