@@ -1,10 +1,11 @@
-import { iniciarTema, toggleTema, obtenerNombre ,actualizarBadgeCarrito , formatearPrecio} from './utils.js';
+import { iniciarTema, toggleTema, obtenerNombre ,actualizarBadgeCarrito , formatearPrecio, limpiarCarrito} from './utils.js';
 import { apiVentas } from './api/cliente-api.js'; 
 
 iniciarTema();
 actualizarBadgeCarrito();
 document.getElementById('btnTema').addEventListener('click', toggleTema);
 
+const btnSalir = document.getElementById('btnSalir');
 const nombre = obtenerNombre();
 if (!nombre) window.location.href = 'index.html';
 
@@ -17,6 +18,7 @@ function formatearFecha(fechaISO) {
 }
 
 function renderTicket(venta) {
+
     const productos = venta.productos;
     const filasHTML = productos.map((p)=> {
         const cantidad = p.VentaProducto.cantidad;
@@ -120,4 +122,22 @@ function renderCargando() {
 }
 
 renderCargando();
+
+btnSalir.addEventListener('click', () => {
+
+    sessionStorage.removeItem('nextplay_venta_id');
+    try {
+        limpiarCarrito();
+    } catch {
+        localStorage.removeItem('nextplay_carrito');
+        const badge = document.getElementById('carritoBadge');
+        if (badge) {
+            badge.textContent = '0';
+            badge.style.display = 'none';
+        }
+    }
+
+    window.location.href = 'index.html';
+});
+
 apiVentas.obtener(ventaId).then(renderTicket).catch(renderError);
