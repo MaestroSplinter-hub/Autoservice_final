@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NextPlay - Login Admin</title>
-    <link rel="icon" type="image/x-icon" href="../public/assets/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/backend/src/public/assets/favicon_nextplay.webp" />
     <link rel="stylesheet" href="/css/login.css" />
     <style>
         /*Estilos pagina bienvenida*/
@@ -225,7 +225,7 @@
     <script>
         const TEMA_KEY = 'nextplay_tema';
 
-        function actualizarIconoTema(tema) {
+        const actualizarIconoTema = (tema) => {
             const sol = document.getElementById('iconoSol');
             const luna = document.getElementById('iconoLuna');
             if (!sol || !luna) return;
@@ -237,21 +237,21 @@
                 sol.style.display = 'none';
                 luna.style.display = 'block';
             }
-        }
+        };
 
-        function aplicarTema(tema) {
+        const aplicarTema = (tema) => {
             document.documentElement.setAttribute('data-theme', tema);
             try { localStorage.setItem(TEMA_KEY, tema); } catch (_) {}
             actualizarIconoTema(tema);
-        }
+        };
 
-        function obtenerTema() {
+        const obtenerTema = () => {
             try {
                 return localStorage.getItem(TEMA_KEY) || 'light';
             } catch {
                 return 'light';
             }
-        }
+        };
 
         aplicarTema(obtenerTema());
 
@@ -260,12 +260,12 @@
         const inputContrasenia = document.getElementById('contrasenia');
         const btnTema = document.getElementById('btnTema');
 
-        btnAccesoRapido?.addEventListener('click', () => {
+        btnAccesoRapido.addEventListener('click', () => {
             inputCorreo.value = 'admin@nextplay.com';
             inputContrasenia.value = 'admin123';
         });
 
-        btnTema?.addEventListener('click', () => {
+        btnTema.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme') || 'light';
             aplicarTema(current === 'light' ? 'dark' : 'light');
         });

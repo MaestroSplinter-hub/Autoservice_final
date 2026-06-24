@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="es" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextPlay - Admin Dashboard</title>
-    <link rel="icon" type="image/x-icon" href="../../public/assets/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../../public/assets/favicon_nextplay.webp">
     <link rel="stylesheet" href="../../public/css/login.css">
 </head>
 <body>
@@ -36,9 +37,26 @@
 
     <main class="main-content">
         <div class="container">
-            <h1 style="text-align:center; margin-bottom: 1.5rem;">
-                Panel Admin - Productos
-            </h1>
+            <div class="admin-hero">
+                <div class="admin-hero__badge">Back Office</div>
+                <h1 style="margin-bottom: 0.75rem;">Panel de Administración</h1>
+                <p class="text-muted" style="max-width:720px; margin:0 auto;">Gestioná productos (alta / edición / baja lógica / reactivación). Los cambios impactan directamente en el catálogo del lado del cliente (activo=false no se ve).</p>
+            </div>
+
+            <div class="admin-steps" style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 0 auto 2.5rem; align-items: stretch;">
+                <div class="card" style="padding: 1.1rem 1.25rem; text-align:left;">
+                    <div style="font-weight:900; color: var(--violeta); font-family: 'Exo 2', sans-serif;">1) Alta</div>
+                    <div class="text-muted" style="margin-top: 0.35rem;">Cargá un nuevo producto con imagen y lo agregamos como activo.</div>
+                </div>
+                <div class="card" style="padding: 1.1rem 1.25rem; text-align:left;">
+                    <div style="font-weight:900; color: var(--violeta); font-family: 'Exo 2', sans-serif;">2) Edición / Baja lógica</div>
+                    <div class="text-muted" style="margin-top: 0.35rem;">Editá nombre/precio/imagen o desactivá el producto (activo=false).</div>
+                </div>
+                <div class="card" style="padding: 1.1rem 1.25rem; text-align:left;">
+                    <div style="font-weight:900; color: var(--violeta); font-family: 'Exo 2', sans-serif;">3) Activación</div>
+                    <div class="text-muted" style="margin-top: 0.35rem;">Reactivá un producto inactivo (activo=true) para que vuelva al cliente.</div>
+                </div>
+            </div>
 
             <section style="margin-bottom: 3rem;">
                 <h2 style="margin-bottom: 1rem;">Agregar nuevo producto</h2>
@@ -68,9 +86,7 @@
                             <input class="form-input" type="file" id="imagen" name="imagen" accept="image/*" />
                         </div>
 
-                        <button class="btn btn-primary btn-lg" type="submit" style="width:100%; margin-top: 0.5rem;">
-                            Agregar producto
-                        </button>
+                        <button class="btn btn-primary btn-lg" type="submit" style="width:100%; margin-top: 0.5rem;">Agregar producto</button>
                     </form>
                 </div>
             </section>
@@ -196,9 +212,73 @@
         <script>
             const btnTema = document.getElementById('btnTema');
             const root = document.documentElement;
-            btnTema.addEventListener('click', () => {
+
+            const aplicarTemaPersistido = () => {
+                const temaGuardado = localStorage.getItem('nextplay_theme');
+                if (temaGuardado === 'light' || temaGuardado === 'dark') root.setAttribute('data-theme', temaGuardado);
+            };
+
+            aplicarTemaPersistido();
+
+            btnTema?.addEventListener('click', () => {
                 const current = root.getAttribute('data-theme') || 'light';
-                root.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+                const nuevoTema = current === 'light' ? 'dark' : 'light';
+                root.setAttribute('data-theme', nuevoTema);
+                localStorage.setItem('nextplay_theme', nuevoTema);
+            });
+
+            // Modal de confirmación para activar/desactivar (baja lógica / reactivación)
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal">
+                    <div class="modal-icon" style="width:56px; height:56px; border-radius:18px; margin:0 auto 1rem; background: linear-gradient(135deg, var(--violeta), var(--celeste)); display:flex; align-items:center; justify-content:center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:28px; height:28px; color:#fff;">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                    </div>
+                    <h3 class="modal__title" style="text-align:center; margin-bottom:0.5rem;">Confirmar</h3>
+                    <p class="modal__body" id="modalTexto" style="text-align:center;">¿Estás seguro?</p>
+                    <div class="modal__actions">
+                        <button class="btn btn-outline" id="btnCancelarModal" type="button">Cancelar</button>
+                        <button class="btn btn-primary" id="btnConfirmarModal" type="button">Confirmar</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            let accion = null;
+            const btnCancelarModal = modal.querySelector('#btnCancelarModal');
+            const btnConfirmarModal = modal.querySelector('#btnConfirmarModal');
+
+            const abrirModal = (texto, form) => {
+                accion = form;
+                modal.classList.add('visible');
+                const textoEl = modal.querySelector('#modalTexto');
+                if (textoEl) textoEl.textContent = texto;
+            };
+
+            const cerrarModal = () => {
+                modal.classList.remove('visible');
+                accion = null;
+            };
+
+            btnCancelarModal?.addEventListener('click', cerrarModal);
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) cerrarModal();
+            });
+            btnConfirmarModal?.addEventListener('click', () => {
+                if (accion) accion.submit();
+                cerrarModal();
+            });
+
+            // Hook: reemplazar submit directo de los forms por modal
+            document.querySelectorAll('form[action$="/desactivar"], form[action$="/activar"]').forEach((form) => {
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const esDesactivar = form.getAttribute('action')?.includes('/desactivar');
+                    abrirModal(esDesactivar ? '¿Está seguro de eliminar el producto? (baja lógica)' : '¿Está seguro de activar el producto? ¿Confirmar acción?', form);
+                });
             });
         </script>
     </main>
