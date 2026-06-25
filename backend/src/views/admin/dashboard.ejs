@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextPlay - Admin Dashboard</title>
-    <link rel="icon" type="image/x-icon" href="../../public/assets/favicon_nextplay.webp">
-    <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon_nextplay.webp">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <nav class="navbar">
@@ -274,9 +274,28 @@
             modal?.addEventListener('click', (e) => {
                 if (e.target === modal) cerrarModal();
             });
-            btnConfirmarModal?.addEventListener('click', () => {
-                if (accion) accion.submit();
-                cerrarModal();
+            btnConfirmarModal?.addEventListener('click', async () => {
+                if (accion) {
+                    btnConfirmarModal.textContent = 'Procesando...';
+                    btnConfirmarModal.style.pointerEvents = 'none';
+                    try {
+                        const response = await fetch(accion.accion, {
+                            method: accion.method || 'POST',
+                            body: new FormData(accion)
+                        });
+
+                        if (response.ok || response.redirected) {
+                            window.location.reload(true);
+                        } else {
+                            accion.submit();
+                        }
+                    } catch (error){
+                        console.error('Error al realizar la peticion:',error);
+                        accion.submit();
+                    }
+                }else{
+                    cerrarModal();
+                }
             });
 
             // Hook: reemplazar submit directo de los forms por modal
