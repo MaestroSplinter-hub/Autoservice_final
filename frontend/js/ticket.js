@@ -5,7 +5,6 @@ iniciarTema();
 actualizarBadgeCarrito();
 document.getElementById('btnTema').addEventListener('click', toggleTema);
 
-const btnSalir = document.getElementById('btnSalir');
 const nombre = obtenerNombre();
 if (!nombre) window.location.href = 'index.html';
 
@@ -128,21 +127,5 @@ function renderCargando() {
 
 renderCargando();
 
-btnSalir.addEventListener('click', () => {
-
-    sessionStorage.removeItem('nextplay_venta_id');
-    try {
-        limpiarCarrito();
-    } catch {
-        localStorage.removeItem('nextplay_carrito');
-        const badge = document.getElementById('carritoBadge');
-        if (badge) {
-            badge.textContent = '0';
-            badge.style.display = 'none';
-        }
-    }
-
-    window.location.href = 'index.html';
-});
 
 apiVentas.obtener(ventaId).then(renderTicket).catch(renderError);

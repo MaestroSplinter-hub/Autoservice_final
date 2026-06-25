@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NextPlay - Admin Dashboard</title>
     <link rel="icon" type="image/x-icon" href="../../public/assets/favicon_nextplay.webp">
-    <link rel="stylesheet" href="../../public/css/login.css">
+    <link rel="stylesheet" href="../../public/css/style.css">
 </head>
 <body>
     <nav class="navbar">
@@ -197,9 +197,28 @@
             const btnTema = document.getElementById('btnTema');
             const root = document.documentElement;
 
+            const TEMA_KEY = 'nextplay_tema';
+            const NOMBRE_KEY = 'nextplay_nombre';
+
+            const actualizarIconoTema = (tema) => {
+                const sol = document.getElementById('iconoSol');
+                const luna = document.getElementById('iconoLuna');
+                if (!sol || !luna) return;
+                if (tema === 'dark') {
+                    sol.style.display = 'block';
+                    luna.style.display = 'none';
+                } else {
+                    sol.style.display = 'none';
+                    luna.style.display = 'block';
+                }
+            };
+
             const aplicarTemaPersistido = () => {
-                const temaGuardado = localStorage.getItem('nextplay_theme');
-                if (temaGuardado === 'light' || temaGuardado === 'dark') root.setAttribute('data-theme', temaGuardado);
+                const temaGuardado = localStorage.getItem(TEMA_KEY) || 'light';
+                if (temaGuardado === 'light' || temaGuardado === 'dark') {
+                    root.setAttribute('data-theme', temaGuardado);
+                    actualizarIconoTema(temaGuardado);
+                }
             };
 
             aplicarTemaPersistido();
@@ -208,8 +227,12 @@
                 const current = root.getAttribute('data-theme') || 'light';
                 const nuevoTema = current === 'light' ? 'dark' : 'light';
                 root.setAttribute('data-theme', nuevoTema);
-                localStorage.setItem('nextplay_theme', nuevoTema);
+                localStorage.setItem('nextplay_tema', nuevoTema);
             });
+
+            const obtenerNombreAdmin = () => {
+                return sessionStorage.getItem(NOMBRE_KEY) || null;
+            };
 
             // Modal de confirmación para activar/desactivar (baja lógica / reactivación)
             const modal = document.createElement('div');
