@@ -1,14 +1,11 @@
 import { Router } from "express";
-import { mostrarLogin, loguear, loguearJSON } from "../controllers/authController.js";
-import { validarUsuarioAdmin } from "../middlewares/productoMiddle.js";
-import { evitarLoginSiSesionValidaHTML, evitarLoginSiSesionValidaJSON } from "../middlewares/authJwtMiddleware.js";
+import { mostrarLogin, loguear } from "../controllers/authController.js";
+import { evitarReloguear } from "../middlewares/authJwtMiddleware.js";
 
 export const router = Router();
 
-router.get("/login", evitarLoginSiSesionValidaHTML, mostrarLogin);
+router.get("/login", evitarReloguear, mostrarLogin);
 
-router.post("/login", evitarLoginSiSesionValidaHTML, loguear);
-
-router.post("/api/auth/login", evitarLoginSiSesionValidaJSON, validarUsuarioAdmin, loguearJSON);
+router.post("/login", evitarReloguear, loguear);
 
 export default router;

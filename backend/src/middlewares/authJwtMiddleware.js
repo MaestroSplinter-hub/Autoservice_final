@@ -33,7 +33,7 @@ export const verificarJWTAdmin = (req, res, next) => {
         .catch(manejarErrores(res));
 };
 
-export const evitarLoginSiSesionValidaHTML = (req, res, next) => {
+export const evitarReloguear = (req, res, next) => {
     const llave = process.env.JWT_SECRET;
     if (!llave) return enviarErrorJWT(res);
 
@@ -42,21 +42,6 @@ export const evitarLoginSiSesionValidaHTML = (req, res, next) => {
 
     verificarTokenPromesa(token, llave)
         .then(() => res.redirect("/admin/dashboard"))
-        .catch(() => {
-            limpiarCookieToken(res);
-            return next();
-        });
-};
-
-export const evitarLoginSiSesionValidaJSON = (req, res, next) => {
-    const llave = process.env.JWT_SECRET;
-    if (!llave) return enviarErrorJWT(res);
-
-    const token = obtenerTokenDesdeCookie(req);
-    if (!token) return next();
-
-    verificarTokenPromesa(token, llave)
-        .then(() => res.status(401).json({ status: false, mensaje: "Ya hay una sesión activa" }))
         .catch(() => {
             limpiarCookieToken(res);
             return next();
