@@ -1,11 +1,6 @@
 import { Producto } from "../models/index.js";
 import { crearProducto, actualizarProducto, cambiarEstadoProducto } from "../services/productoServices.js";
-
-const volverADashboard = (res) => res.redirect('/admin/dashboard');
-
-const volverALogin = (res) => res.redirect('/login');
-
-const volverALoginErr = (res) => () => res.status(500).redirect('/login');
+import { volverADashboard, volverALoginErr, volverALogin } from "../utils/adminUtils.js";
 
 export const mostrarDashboardAdmin = async (req, res) => {
     try {
