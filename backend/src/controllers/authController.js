@@ -1,9 +1,27 @@
-import { ServerError, ErrorInterno } from "../errors/ErrorApp.js";
+import jwt from "jsonwebtoken";
+import { ServerError, ErrorInterno, JWTInexistenteError } from "../errors/ErrorApp.js";
 import { autenticarUsuario } from "../services/authServices.js";
+
+const configurarCookieToken = (res, token) => {
+    const cookie = `token=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`;
+    res.setHeader("Set-Cookie", cookie);
+};
+
+const abrirSesion = (res) => (usuario) => {
+    const llave = process.env.JWT_SECRET;
+    if (!llave) throw new JWTInexistenteError();
+
+    const payload = { id: usuario.id, correo: usuario.correo, rol: "admin" };
+    const opciones = { expiresIn: "2h" };
+    const token = jwt.sign(payload, llave, opciones);
+
+    configurarCookieToken(res, token);
+    resLogin(res);
+};
 
 const resLogin = (res) => res.redirect("/admin/dashboard");
 
-const resLoginJSON = (res) => (usuario) => res.json({ status: true, mensaje: 'Login correcto', usuario });
+const resLoginJSON = (res) => (usuario) => res.json({ status: true, mensaje: "Login correcto", usuario });
 
 const manejarErroresVista = (res) => (error) => {
     if (error instanceof ServerError) return res.status(error.statusCode).render("login", { error: error.message });
@@ -22,7 +40,7 @@ const manejarErroresJSON = (res) => (error) => {
 export const loguear = (req, res) => {
     const { correo, contrasenia } = req.body;
     autenticarUsuario(correo, contrasenia)
-        .then(() => resLogin(res))
+        .then(abrirSesion(res))
         .catch(manejarErroresVista(res));
 };
 
@@ -33,4 +51,4 @@ export const loguearJSON = (req, res) => {
         .catch(manejarErroresJSON(res));
 };
 
-export const mostrarLogin = (req, res) => res.render('login', { error: null });
+export const mostrarLogin = (req, res) => res.render("login", { error: null });

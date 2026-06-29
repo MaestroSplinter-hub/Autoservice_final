@@ -56,3 +56,10 @@ export class ventaInexistenteError extends ServerError {
         this.name = "VentaInexistenteError";
     }
 }
+
+export class JWTInexistenteError extends ServerError {
+    constructor() {
+        super(500, "JWT_SECRET_FALTANTE", "La clave secreta de autenticación no está configurada en el servidor");
+        this.name = "JWTInexistenteError";
+    }
+}

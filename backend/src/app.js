@@ -1,6 +1,7 @@
 import express from 'express';
 import path from "path";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import sequelize from './config/database.js'; 
 import { router as usuarioRouter } from "./routes/usuarioRoutes.js";
 import { router as authRouter } from "./routes/authRoutes.js";
@@ -19,6 +20,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
