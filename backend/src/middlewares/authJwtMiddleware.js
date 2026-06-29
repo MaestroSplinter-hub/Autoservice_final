@@ -1,25 +1,64 @@
-import jwt from "jsonwebtoken";
-import { Usuario } from "../models";
+import {
+    enviarErrorJWT,
+    volverALogin,
+    verificarTokenPromesa,
+    validarExistenciaUsuario,
+    manejarErrores,
+    obtenerTokenDesdeCookie,
+    buscarUsuarioDesdePayload
+} from "./middlewareUtils/authJWTutils.js";
 
-const obtenerTokenDesdeCookie = (req) => req.cookies.token || null;
+const opcionesCookieToken = {
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production'
+};
 
-export const verificarJWTAdmin = async (req, res, next) => { 
-    const secret = process.env.JWT_SECRET;
-    if (!secret) return res.status(500).render("login", { error: "JWT_SECRET no configurado" });
+const limpiarCookieToken = (res) => {
+    res.clearCookie('token', opcionesCookieToken);
+};
 
-    try {
-        const token = obtenerTokenDesdeCookie(req);
-        if (!token) return res.redirect("/login");
+export const verificarJWTAdmin = (req, res, next) => {
+    const llave = process.env.JWT_SECRET;
+    if (!llave) return enviarErrorJWT(res);
 
-        const payload = jwt.verify(token, secret); 
+    const token = obtenerTokenDesdeCookie(req);
+    if (!token) return volverALogin(res);
 
-        const usuario = await Usuario.findByPk(payload.id);
-        
-        if (!usuario) return res.redirect("/login");
+    verificarTokenPromesa(token, llave)
+        .then(buscarUsuarioDesdePayload(req))
+        .then(validarExistenciaUsuario)
+        .then(next)
+        .catch(manejarErrores(res));
+};
 
-        req.auth = payload;
-        next();
-    } catch (error) {
-        return res.redirect("/login");
-    }
+export const evitarLoginSiSesionValidaHTML = (req, res, next) => {
+    const llave = process.env.JWT_SECRET;
+    if (!llave) return enviarErrorJWT(res);
+
+    const token = obtenerTokenDesdeCookie(req);
+    if (!token) return next();
+
+    verificarTokenPromesa(token, llave)
+        .then(() => res.redirect("/admin/dashboard"))
+        .catch(() => {
+            limpiarCookieToken(res);
+            return next();
+        });
+};
+
+export const evitarLoginSiSesionValidaJSON = (req, res, next) => {
+    const llave = process.env.JWT_SECRET;
+    if (!llave) return enviarErrorJWT(res);
+
+    const token = obtenerTokenDesdeCookie(req);
+    if (!token) return next();
+
+    verificarTokenPromesa(token, llave)
+        .then(() => res.status(401).json({ status: false, mensaje: "Ya hay una sesión activa" }))
+        .catch(() => {
+            limpiarCookieToken(res);
+            return next();
+        });
 };

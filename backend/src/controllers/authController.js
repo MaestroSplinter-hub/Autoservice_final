@@ -3,20 +3,29 @@ import { ServerError, ErrorInterno, JWTInexistenteError } from "../errors/ErrorA
 import { autenticarUsuario } from "../services/authServices.js";
 
 const configurarCookieToken = (res, token) => {
-    const cookie = `token=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`;
-    res.setHeader("Set-Cookie", cookie);
+    const DOS_HORAS_EN_MS = 2 * 60 * 60 * 1000;
+
+    const opcionesCookie = {
+        maxAge: DOS_HORAS_EN_MS,
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production'
+    }
+
+    res.cookie('token', token, opcionesCookie);
 };
 
-const abrirSesion = (res) => (usuario) => {
+const abrirSesion = (res, callbackRespuesta) => (usuario) => {
     const llave = process.env.JWT_SECRET;
     if (!llave) throw new JWTInexistenteError();
 
     const payload = { id: usuario.id, correo: usuario.correo, rol: "admin" };
-    const opciones = { expiresIn: "2h" };
+    const opciones = { expiresIn: "2h" }; 
     const token = jwt.sign(payload, llave, opciones);
 
     configurarCookieToken(res, token);
-    resLogin(res);
+    callbackRespuesta(res)(usuario);
 };
 
 const resLogin = (res) => res.redirect("/admin/dashboard");
@@ -40,14 +49,14 @@ const manejarErroresJSON = (res) => (error) => {
 export const loguear = (req, res) => {
     const { correo, contrasenia } = req.body;
     autenticarUsuario(correo, contrasenia)
-        .then(abrirSesion(res))
+        .then(abrirSesion(res, () => resLogin))
         .catch(manejarErroresVista(res));
 };
 
 export const loguearJSON = (req, res) => {
     const { correo, contrasenia } = req.body;
     autenticarUsuario(correo, contrasenia)
-        .then(resLoginJSON(res))
+        .then(abrirSesion(res, resLoginJSON))
         .catch(manejarErroresJSON(res));
 };
 
