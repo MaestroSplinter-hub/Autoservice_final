@@ -4,13 +4,14 @@ import { UsuarioInexistenteError, ContraseniaIncorrectaError, ServerError, Error
 
 const compararContraseña = (contra1, contra2) => bcrypt.compare(contra1, contra2);
 
+const validarCoincidencia = (coinciden) => {if (!coinciden) throw new ContraseniaIncorrectaError();}
+
 export const validarUsuario = (usuario) => {
     if (!usuario) throw new UsuarioInexistenteError();
     return usuario;
 };
 
 export const validarContra = (contrasenia) => (usuario) => {
-    const validarCoincidencia = (coinciden) => {if (!coinciden) throw new ContraseniaIncorrectaError();}
     return compararContraseña(contrasenia, usuario.contrasenia)
         .then(validarCoincidencia)
         .then(() => usuario);
