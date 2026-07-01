@@ -8,7 +8,7 @@ const resolverJWT = (resolve, reject) => (error, payload) => error ? reject(erro
 
 const ejecutarVerificación = (token, llave) => (resolve, reject) => jwt.verify(token, llave, resolverJWT(resolve, reject));
 
-export const verificarTokenPromesa = (token, llave) => new Promise(ejecutarVerificación(token, llave));
+export const verificarToken = (token, llave) => new Promise(ejecutarVerificación(token, llave));
 
 const enviarError = (res, error) => res.status(error.statusCode).render("login", error.aResponse());
 

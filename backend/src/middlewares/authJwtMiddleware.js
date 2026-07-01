@@ -1,7 +1,7 @@
 import {
     enviarErrorJWT,
     volverALogin,
-    verificarTokenPromesa,
+    verificarToken,
     validarExistenciaUsuario,
     manejarErrores,
     obtenerTokenDesdeCookie,
@@ -27,7 +27,7 @@ export const verificarJWTAdmin = (req, res, next) => {
     const token = obtenerTokenDesdeCookie(req);
     if (!token) return volverALogin(res);
 
-    verificarTokenPromesa(token, llave)
+    verificarToken(token, llave)
         .then(buscarUsuarioDesdePayload(req))
         .then(validarExistenciaUsuario)
         .then(next)
@@ -41,7 +41,7 @@ export const evitarReloguear = (req, res, next) => {
     const token = obtenerTokenDesdeCookie(req);
     if (!token) return next();
 
-    verificarTokenPromesa(token, llave)
+    verificarToken(token, llave)
         .then(irADashboard)
         .catch(() => {
             limpiarCookieToken(res);
