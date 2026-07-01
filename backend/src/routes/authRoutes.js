@@ -6,6 +6,6 @@ export const router = Router();
 
 router.get("/login", evitarReloguear, mostrarLogin);
 
-router.post("/login", evitarReloguear, loguear);
+router.post("/login", evitarReloguear, loguear); // cookies, JWT y Bcrypt
 
 export default router;

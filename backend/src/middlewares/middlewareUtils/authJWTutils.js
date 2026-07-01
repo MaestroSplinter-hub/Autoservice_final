@@ -19,7 +19,7 @@ export const enviarErrorJWT = (res) => {
 
 export const volverALogin = (res) => res.redirect("/login");
 
-export const irADashboard = () => res.redirect("/admin/dashboard");
+export const irADashboard = (res) => () => res.redirect("/admin/dashboard");
 
 export const buscarUsuarioDesdePayload = (req) => (payload) => {
     req.auth = payload;

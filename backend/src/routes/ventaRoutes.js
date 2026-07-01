@@ -6,6 +6,6 @@ export const router = Router();
 
 router.post("/", validarVentaCrear, createVenta);
 router.get("/:id", validarIdParam, getVenta)
-router.get("/:id/ticket", validarIdParam, getTicketVenta);
+router.get("/:id/ticket", validarIdParam, getTicketVenta); // puppeteer
 
 export default router;

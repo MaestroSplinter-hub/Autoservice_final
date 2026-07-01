@@ -1,4 +1,5 @@
 import { autenticarUsuario, abrirSesion } from "../services/authServices.js";
+import { manejarErroresVista } from "../utils/authUtils.js";
 
 export const loguear = (req, res) => {
     const { correo, contrasenia } = req.body;
