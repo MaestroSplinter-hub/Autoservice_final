@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { buscarUsuario } from "../utils/usuarioUtils.js";
-import { validarUsuario, validarContra, configurarCookieToken, resDashboard } from "../utils/authUtils.js";
+import { validarUsuario, validarContra, cargarCookie, resDashboard } from "../utils/authUtils.js";
 import { JWTInexistenteError } from "../errors/ErrorApp.js";
 
 export const autenticarUsuario = (correo, contrasenia) => 
@@ -16,6 +16,6 @@ export const abrirSesion = (res) => (usuario) => {
     const opciones = { expiresIn: "2h" }; 
     const token = jwt.sign(payload, llave, opciones);
 
-    configurarCookieToken(res, token);
+    cargarCookie(res, token);
     resDashboard(res);
 };

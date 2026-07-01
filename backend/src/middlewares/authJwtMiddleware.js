@@ -5,7 +5,8 @@ import {
     validarExistenciaUsuario,
     manejarErrores,
     obtenerTokenDesdeCookie,
-    buscarUsuarioDesdePayload
+    buscarUsuarioDesdePayload,
+    irADashboard
 } from "./middlewareUtils/authJWTutils.js";
 
 const opcionesCookieToken = {
@@ -41,7 +42,7 @@ export const evitarReloguear = (req, res, next) => {
     if (!token) return next();
 
     verificarTokenPromesa(token, llave)
-        .then(() => res.redirect("/admin/dashboard"))
+        .then(irADashboard)
         .catch(() => {
             limpiarCookieToken(res);
             return next();

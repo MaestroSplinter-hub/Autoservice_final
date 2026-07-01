@@ -17,7 +17,7 @@ export const validarContra = (contrasenia) => (usuario) => {
         .then(() => usuario);
 };
 
-export const configurarCookieToken = (res, token) => {
+export const cargarCookie = (res, token) => {
     const DOS_HORAS_EN_MS = 2 * 60 * 60 * 1000;
 
     const cookieConfig = {
