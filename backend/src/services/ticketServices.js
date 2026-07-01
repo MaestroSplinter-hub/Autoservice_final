@@ -33,8 +33,11 @@ const renderizarHTML = (datosPlantilla) => ejs.renderFile(RUTA_PLANTILLA, datosP
 
 const generarPDFdesdeHTML = (html) => {
     let navegador;
+    const opcionesNavegador = {headless: "new", args: ["--no-sandbox", "--disable-setuid-sandbox"]};
 
-    const iniciarNavegador = (instanciaNavegador) => {
+    const abrirNavegador = (opciones) => puppeteer.launch(opciones);
+
+    const abrirPestania = (instanciaNavegador) => {
         navegador = instanciaNavegador;
         return navegador.newPage();
     };
@@ -54,8 +57,8 @@ const generarPDFdesdeHTML = (html) => {
         }
     };
 
-    return puppeteer.launch({headless: "new", args: ["--no-sandbox", "--disable-setuid-sandbox"]})
-                    .then(iniciarNavegador)
+    return abrirNavegador(opcionesNavegador)
+                    .then(abrirPestania)
                     .then(configurarContenido)
                     .then(exportarPDF)
                     .catch(manejarError)
