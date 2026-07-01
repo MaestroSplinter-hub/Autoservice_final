@@ -2,14 +2,11 @@ import ejs from "ejs";
 import puppeteer from "puppeteer";
 import path from "path";
 import { fileURLToPath } from "url";
+import { formatearMoneda, formatearFecha } from "../utils/ticketUtils.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const RUTA_PLANTILLA = path.join(__dirname, "../views/ticket.ejs");
-
-const formatearMoneda = (valor) => new Intl.NumberFormat ("es-AR", {style: "currency", currency: "ARS", maximumFractionDigits: 0}).format(valor);
-
-const formatearFecha = (fecha) => new Date(fecha).toLocaleDateString("es-AR", {day: "2-digit", month:"2-digit", year:"numeric"});
 
 const armarDatosPlantilla = (venta) => {
     const productos = venta.productos.map((producto) => {
