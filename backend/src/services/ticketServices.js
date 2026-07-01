@@ -8,24 +8,26 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const RUTA_PLANTILLA = path.join(__dirname, "../views/ticket.ejs");
 
+const formatearProducto = (producto) => {
+    const cantidad = producto.VentaProducto.cantidad;
+    const precioUnitario = producto.VentaProducto.precio_unitario;
+    const subtotal = cantidad * precioUnitario;
+    return {
+        nombre: producto.nombre,
+        cantidad,
+        precioUnitario: formatearMoneda(precioUnitario),
+        subtotal: formatearMoneda(subtotal)
+    };
+}
+
 const armarDatosPlantilla = (venta) => {
-    const productos = venta.productos.map((producto) => {
-        const cantidad = producto.VentaProducto.cantidad;
-        const precioUnitario = producto.VentaProducto.precio_unitario;
-        const subtotal = cantidad * precioUnitario;
-        return {
-            nombre: producto.nombre,
-            cantidad,
-            precioUnitario: formatearMoneda(precioUnitario),
-            subtotal: formatearMoneda(subtotal)
-        };
-    });
+    const productosFormateados = venta.productos.map(formatearProducto);
     return {
         id: venta.id,
         nombreCliente: venta.nombre_cliente,
         fecha: formatearFecha(venta.fecha),
         total: formatearMoneda(venta.total),
-        productos
+        productos: productosFormateados
     };
 };
 
