@@ -2,23 +2,11 @@ import ejs from "ejs";
 import puppeteer from "puppeteer";
 import path from "path";
 import { fileURLToPath } from "url";
-import { formatearMoneda, formatearFecha } from "../utils/ticketUtils.js";
+import { formatearMoneda, formatearFecha, formatearProducto } from "../utils/ticketUtils.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const RUTA_PLANTILLA = path.join(__dirname, "../views/ticket.ejs");
-
-const formatearProducto = (producto) => {
-    const cantidad = producto.VentaProducto.cantidad;
-    const precioUnitario = producto.VentaProducto.precio_unitario;
-    const subtotal = cantidad * precioUnitario;
-    return {
-        nombre: producto.nombre,
-        cantidad,
-        precioUnitario: formatearMoneda(precioUnitario),
-        subtotal: formatearMoneda(subtotal)
-    };
-}
 
 const armarDatosPlantilla = (venta) => {
     const productosFormateados = venta.productos.map(formatearProducto);
