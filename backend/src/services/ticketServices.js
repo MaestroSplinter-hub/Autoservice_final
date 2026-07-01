@@ -41,11 +41,7 @@ const generarPDFdesdeHTML = (html) => {
         throw error;
     };
 
-    const limpiarRecursos = () => {
-        if (navegador) {
-            return navegador.close();
-        }
-    };
+    const limpiarRecursos = () => {if (navegador) return navegador.close();};
 
     return abrirNavegador(opcionesNavegador)
                     .then(abrirPestania)
